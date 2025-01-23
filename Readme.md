@@ -2,7 +2,8 @@
 
 This repository contains the code of exercises included in the book "Hand-on Neural Networks with TensorFlow 2.0" by Paolo Galeone. The book is published by Packt Publishing. 
 In this repository you will also some extra codes for exercises described in the section "Exercises" of the chapters and not provided by the author.
-It is important to notice as well that I corrected some errors in the code provided by the author in the book.
+
+**It is important to note as well that I corrected some errors (some small and big ones) in the code provided by the author of this book.**
 
 # Environment and execution
 
