@@ -57,9 +57,17 @@ def d_loss(d_real, d_fake):
     """The disciminator loss function."""
     return bce(tf.ones_like(d_real), d_real) + bce(tf.zeros_like(d_fake), d_fake)
 
+def g_loss(generated_output):
+    """The Generator loss function."""
+    return bce(tf.ones_like(generated_output), generated_output)
+
+# MFT: IPython not imported in the original code
+from IPython import display
+
 def train():
     # Define the optimizers and the train operations
-    optimizer = tf.keras.optimizers.Adam(1e-5)
+    # optimizer = tf.keras.optimizers.Adam(1e-5)
+    optimizer = tf.keras.optimizers.legacy.Adam(1e-5)
     
     @tf.function
     def train_step():
@@ -88,16 +96,19 @@ def train():
         optimizer.apply_gradients(zip(g_gradients, G.trainable_variables))
         return real_data, fake_data, g_loss_value, d_loss_value
     
+    plt.ion()
 
     fig, ax = plt.subplots()
     for step in range(40000):
         real_data, fake_data,g_loss_value, d_loss_value = train_step()
-        if step % 200 == 0:
+        if step % 500 == 0:
             print("G loss: ", g_loss_value.numpy(), " D loss: ", d_loss_value.numpy(), " step: ", step)
 
             # Sample 5000 values from the Generator and draw the histogram
-            ax.hist(fake_data.numpy(), 100)
-            ax.hist(real_data.numpy(), 100)
+            ax.clear()
+            ax.clear()
+            ax.hist(fake_data.numpy(), bins=100, alpha=0.5, label='Fake Data')
+            ax.hist(real_data.numpy(), bins=100, alpha=0.5, label='Real Data')
             # these are matplotlib.patch.Patch properties
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
@@ -106,11 +117,17 @@ def train():
             ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=14,
                     verticalalignment='top', bbox=props)
 
-            axes = plt.gca()
-            axes.set_xlim([-1,11])
-            axes.set_ylim([0, 60])
-            display.display(pl.gcf())
+            # axes = plt.gca()
+            ax.set_xlim([-1,11])
+            ax.set_ylim([0, 60])
+            ax.legend()
+
+            display.display(fig)
             display.clear_output(wait=True)
-            plt.gca().clear()
+            plt.pause(0.001)  # Pause pour permettre à la figure de se mettre à jour
+            # plt.gca().clear()
+    
+    plt.ioff()
+    plt.show()
             
 train()            
