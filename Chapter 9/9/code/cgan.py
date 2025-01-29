@@ -127,7 +127,9 @@ import matplotlib.pyplot as plt
 
 def train():
     # Define the optimizers and the train operations
-    optimizer = tf.keras.optimizers.Adam(1e-5)
+    # optimizer = tf.keras.optimizers.Adam(1e-5)
+    # MFT: bug fix
+    optimizer = tf.keras.optimizers.legacy.Adam(1e-5)
 
     @tf.function
     def train_step(image, label):
